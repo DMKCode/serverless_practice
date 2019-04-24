@@ -1,0 +1,19 @@
+{
+  "name": "big-mouth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.442.0",
+    "bluebird": "^3.5.4",
+    "co": "^4.6.0",
+    "mustache": "^3.0.1",
+    "node-fetch": "^2.3.0",
+    "serverless-pseudo-parameters": "^2.4.0"
+  }
+}
