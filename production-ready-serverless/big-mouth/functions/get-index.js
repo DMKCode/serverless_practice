@@ -5,6 +5,8 @@ const Promise = require("bluebird");
 const fs = Promise.promisifyAll(require("fs"));
 const Mustache = require("mustache");
 const fetch = require("node-fetch");
+const URL = require("url");
+const aws4 = require("aws4");
 
 const restaurantsApiRoot = process.env.restaurants_api;
 const days = [
@@ -27,7 +29,22 @@ const loadHtml = () => {
 };
 
 const getRestaurants = async () => {
-  const restaurants = await fetch(restaurantsApiRoot);
+  let url = URL.parse(restaurantsApiRoot);
+  let opts = {
+    host: url.hostname,
+    path: url.pathname
+  };
+
+  aws4.sign(opts);
+  const restaurants = await fetch(restaurantsApiRoot, {
+    method: "get",
+    headers: {
+      Host: opts.headers["Host"],
+      "X-Amz-Date": opts.headers["X-Amz-Date"],
+      Authorization: opts.headers["Authorization"],
+      "X-Amz-Security-Token": opts.headers["X-Amz-Security-Token"]
+    }
+  });
   return await restaurants.json();
 };
 
