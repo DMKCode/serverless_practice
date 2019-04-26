@@ -16,12 +16,12 @@ const getRestaurants = async count => {
   return resp.Items;
 };
 
-module.exports.handler = async (event, context) => {
+module.exports.handler = async (event, context, callback) => {
   let restaurants = await getRestaurants(defaultResults);
   let response = {
     statusCode: 200,
     body: JSON.stringify(restaurants)
   };
 
-  return response;
+  callback(null, response);
 };
