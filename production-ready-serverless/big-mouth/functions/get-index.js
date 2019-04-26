@@ -52,7 +52,7 @@ const getRestaurants = async () => {
   return await restaurants.json();
 };
 
-module.exports.handler = async (event, context) => {
+module.exports.handler = async (event, context, callback) => {
   let template = await loadHtml();
   let restaurants = await getRestaurants();
   let dayOfWeek = days[new Date().getDay()];
@@ -66,11 +66,13 @@ module.exports.handler = async (event, context) => {
   };
   let html = Mustache.render(template, view);
 
-  return {
+  const response = {
     statusCode: 200,
     body: html,
     headers: {
       "Content-Type": "text/html; charset=UTF-8"
     }
   };
+
+  callback(null, response);
 };
