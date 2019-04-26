@@ -4,7 +4,7 @@ const co = require("co");
 const Promise = require("bluebird");
 const fs = Promise.promisifyAll(require("fs"));
 const Mustache = require("mustache");
-const fetch = require("node-fetch");
+const http = require("superagent-promise")(require("superagent"), Promise);
 const URL = require("url");
 const aws4 = require("aws4");
 
@@ -40,16 +40,17 @@ const getRestaurants = async () => {
   };
 
   aws4.sign(opts);
-  const restaurants = await fetch(restaurantsApiRoot, {
-    method: "get",
-    headers: {
-      Host: opts.headers["Host"],
-      "X-Amz-Date": opts.headers["X-Amz-Date"],
-      Authorization: opts.headers["Authorization"],
-      "X-Amz-Security-Token": opts.headers["X-Amz-Security-Token"]
-    }
-  });
-  return await restaurants.json();
+  const httpReg = await http
+    .get(restaurantsApiRoot)
+    .set("Host", opts.headers["Host"])
+    .set("X-Amz-Date", opts.headers["X-Amz-Date"])
+    .set("Authorization", opts.headers["Authorization"]);
+
+  if (opts.headers["X-Amz-Security-Token"]) {
+    httpReg.set("X-Amz-Security-Token", opts.headers["X-Amz-Security-Token"]);
+  }
+
+  return await httpReg.body;
 };
 
 module.exports.handler = async (event, context, callback) => {
