@@ -18,7 +18,7 @@ const findRestaurantsByTheme = async (theme, count) => {
   return resp.Items;
 };
 
-module.exports.handler = async (event, context) => {
+module.exports.handler = async (event, context, callback) => {
   let req = JSON.parse(event.body);
   let restaurants = await findRestaurantsByTheme(req.theme, defaultResults);
   let response = {
@@ -26,5 +26,5 @@ module.exports.handler = async (event, context) => {
     body: JSON.stringify(restaurants)
   };
 
-  return response;
+  callback(null, response);
 };
