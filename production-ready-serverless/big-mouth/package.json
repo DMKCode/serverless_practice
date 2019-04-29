@@ -4,7 +4,8 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
-    "integration-test": "./node_modules/.bin/mocha tests/test_cases --reporter spec --timeout 15000"
+    "integration-test": "env TEST_MODE=handler ./node_modules/.bin/mocha tests/test_cases --reporter spec --timeout 15000",
+    "acceptance-test": "env TEST_MODE=http TEST_ROOT=https://udj82h717g.execute-api.us-east-1.amazonaws.com/dev ./node_modules/.bin/mocha tests/test_cases --reporter spec --retries 3 --timeout 5000"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "chance": "^1.0.18",
     "cheerio": "^1.0.0-rc.3",
     "lodash": "^4.17.11",
     "mocha": "^6.1.4"
