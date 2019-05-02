@@ -7,6 +7,7 @@ const Mustache = require("mustache");
 const http = require("superagent-promise")(require("superagent"), Promise);
 const URL = require("url");
 const aws4 = require("aws4");
+const awscred = Promise.promisifyAll(require("awscred"));
 
 const awsRegion = process.env.AWS_REGION;
 const cognitoUserPoolId = process.env.cognito_user_pool_id;
@@ -38,6 +39,17 @@ const getRestaurants = async () => {
     host: url.hostname,
     path: url.pathname
   };
+
+  if (!process.env.AWS_ACCESS_KEY_ID) {
+    let cred = await awscred.loadAsync({ profile: "dmkcode-US" });
+    const {
+      credentials: { accessKeyId, secretAccessKey }
+    } = cred;
+    process.env.AWS_ACCESS_KEY_ID = accessKeyId;
+    process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
+
+    console.log("AWS Credentials loaded");
+  }
 
   aws4.sign(opts);
   const httpReg = await http

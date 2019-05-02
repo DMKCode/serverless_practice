@@ -1,7 +1,6 @@
 "use strict";
 
 const Promise = require("bluebird");
-const awscred = Promise.promisifyAll(require("awscred"));
 
 let initialised = false;
 
@@ -17,16 +16,6 @@ let init = async () => {
   process.env.cognito_client_id = "test_cognito_user_pool_id";
   process.env.cognito_user_pool_id = "us-east-1_DoRcnwa16";
   process.env.cognito_server_client_id = "51qf54ln3hh63vct86dln3v8ge";
-
-  let cred = await awscred.load((err, data) => {
-    const {
-      credentials: { accessKeyId, secretAccessKey }
-    } = data;
-    process.env.AWS_ACCESS_KEY_ID = accessKeyId;
-    process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
-
-    console.log("AWS Credentials loaded");
-  });
 
   initialised = true;
 };
