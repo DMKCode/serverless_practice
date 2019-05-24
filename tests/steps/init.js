@@ -21,10 +21,14 @@ let init = async () => {
   if (!process.env.AWS_ACCESS_KEY_ID) {
     let cred = await awscred.loadAsync({ profile: 'dmkcode-US' });
     const {
-      credentials: { accessKeyId, secretAccessKey }
+      credentials: { accessKeyId, secretAccessKey, sessionToken }
     } = cred;
     process.env.AWS_ACCESS_KEY_ID = accessKeyId;
     process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
+
+    if (sessionToken) {
+      process.env.AWS_SESSION_TOKEN = sessionToken;
+    }
 
     console.log('AWS Credentials loaded');
   }
