@@ -44,8 +44,10 @@ const getRestaurants = async () => {
     const {
       credentials: { accessKeyId, secretAccessKey, sessionToken }
     } = cred;
+
     process.env.AWS_ACCESS_KEY_ID = accessKeyId;
     process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
+
     if (sessionToken) {
       process.env.AWS_SESSION_TOKEN = sessionToken;
     }
